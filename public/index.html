@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Calorie-Rep Chart</title>
+  </head>
+  <body>
+    <div id="root"></div>
+    <script src="https://unpkg.com/react@18/umd/react.development.js"></script>
+    <script src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
+    <script src="https://unpkg.com/chart.js@3.9.1/dist/chart.min.js"></script>
+    <script src="https://unpkg.com/react-chartjs-2@4.3.1/dist/react-chartjs-2.min.js"></script>
+    <script type="text/babel">
+      const { useState } = React;
+      const { Bar } = ReactChartsJS;
+
+      const CalorieRepChart = () => {
+        const [reps, setReps] = useState(10);
+  const [exercise, setExercise] = useState('pushups');
+
+  const exerciseCaloriesPerRep = {
+    pushups: 0.5,
+    squats: 0.8,
+    situps: 0.3,
+    // Add more exercises as needed
+  };
+
+  const caloriesPerRep = exerciseCaloriesPerRep[exercise];
+  const calories = reps * caloriesPerRep;
+
+  const data = {
+    labels: ['Calories Burned', 'Reps'],
+    datasets: [
+      {
+        data: [calories, reps],
+        backgroundColor: ['rgb(75, 192, 192)', 'rgb(255, 99, 132)'],
+        borderWidth: 1,
+      },
+    ],
+  };
+
+  const options = {
+    scales: {
+      y: {
+        beginAtZero: true,
+        title: {
+          display: true,
+          text: 'Quantity',
+        },
+      },
+    },
+  };
+
+  const handleRepChange = (event) => {
+    setReps(parseInt(event.target.value));
+  };
+
+  const handleExerciseChange = (event) => {
+    setExercise(event.target.value);
+  };
+
+  return (
+    <div>
+      <h1>Calories vs Reps</h1>
+      <div>
+        <label htmlFor="exercise">Select Exercise:</label>
+        <select id="exercise" value={exercise} onChange={handleExerciseChange}>
+          <option value="pushups">Push-ups</option>
+          <option value="squats">Squats</option>
+          <option value="situps">Sit-ups</option>
+          {/* Add more exercise options as needed */}
+        </select>
+      </div>
+      <div>
+        <label htmlFor="reps">Select Reps:</label>
+        <select id="reps" value={reps} onChange={handleRepChange}>
+          <option value="10">10</option>
+          <option value="20">20</option>
+          <option value="30">30</option>
+          <option value="40">40</option>
+          <option value="50">50</option>
+        </select>
+      </div>
+      <Bar data={data} options={options} />
+    </div>
+  );
+      };
+
+      const root = ReactDOM.createRoot(document.getElementById('root'));
+      root.render(<CalorieRepChart />);
+    </script>
+  </body>
+</html>
